@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能运维助手 - Smart Operations Assistant</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 自定义CSS -->
+    <link href="/static/css/main.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-robot"></i>
+                智能运维助手
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            控制台
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#metrics">
+                            <i class="fas fa-chart-line"></i>
+                            监控指标
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#alerts">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            告警管理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#history">
+                            <i class="fas fa-history"></i>
+                            操作历史
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ai-chat">
+                            <i class="fas fa-robot"></i>
+                            智能对话
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#config">
+                            <i class="fas fa-cog"></i>
+                            系统配置
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <span class="navbar-text me-3">
+                        <i class="fas fa-circle text-success" id="connectionStatus"></i>
+                        <span id="statusText">已连接</span>
+                    </span>
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                        刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <div class="container-fluid mt-4">
+        <!-- 控制台概览 -->
+        <div id="dashboard" class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2><i class="fas fa-tachometer-alt"></i> 系统控制台</h2>
+                    <button class="btn btn-primary" onclick="runSystemCheck()">
+                        <i class="fas fa-search"></i>
+                        执行系统检查
+                    </button>
+                </div>
+
+                <!-- 状态卡片 -->
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">系统状态</h5>
+                                        <h3 id="systemStatus">未知</h3>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-server fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">监控指标</h5>
+                                        <h3 id="metricsCount">0</h3>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-chart-line fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">活跃告警</h5>
+                                        <h3 id="alertsCount">0</h3>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="card-title">最后检查</h5>
+                                        <h6 id="lastCheck">从未</h6>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-clock fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI建议区域 -->
+                <div class="row mb-3" id="aiSuggestionsSection" style="display: none;">
+                    <div class="col-12">
+                        <div class="card bg-light">
+                            <div class="card-header">
+                                <h5><i class="fas fa-brain"></i> AI智能分析建议</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="aiSuggestionsContent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 修复方案区域 -->
+                <div class="row mb-3" id="fixPlansSection" style="display: none;">
+                    <div class="col-12">
+                        <div class="card border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5><i class="fas fa-tools"></i> AI修复方案</h5>
+                                    <div>
+                                        <span class="badge bg-light text-primary" id="fixPlansCount">0 个方案</span>
+                                        <button class="btn btn-outline-light btn-sm ms-2" onclick="refreshFixPlans()">
+                                            <i class="fas fa-sync-alt"></i>
+                                            刷新方案
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="fixPlansContent">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-tools fa-2x mb-3"></i>
+                                        <p>暂无修复方案</p>
+                                        <small>执行系统检查后，AI将根据问题生成修复方案</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 执行结果区域 -->
+                <div class="row mb-3" id="executionResultsSection" style="display: none;">
+                    <div class="col-12">
+                        <div class="card border-success">
+                            <div class="card-header bg-success text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5><i class="fas fa-play-circle"></i> 执行结果</h5>
+                                    <div>
+                                        <span class="badge bg-light text-success" id="executionStatus">待执行</span>
+                                        <button class="btn btn-outline-light btn-sm ms-2" onclick="clearExecutionResults()">
+                                            <i class="fas fa-trash"></i>
+                                            清空结果
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="executionResultsContent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 实时图表 -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-microchip"></i> CPU使用率</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="cpuChart" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-memory"></i> 内存使用率</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="memoryChart" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 监控指标详情 -->
+        <div id="metrics" class="row mb-4" style="display: none;">
+            <div class="col-12">
+                <h2><i class="fas fa-chart-line"></i> 监控指标详情</h2>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-microchip"></i> CPU指标</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="cpuMetricsList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-memory"></i> 内存指标</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="memoryMetricsList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-hdd"></i> 磁盘指标</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="diskMetricsList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-network-wired"></i> 网络指标</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="networkMetricsList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 告警管理 -->
+        <div id="alerts" class="row mb-4" style="display: none;">
+            <div class="col-12">
+                <h2><i class="fas fa-exclamation-triangle"></i> 告警管理</h2>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <h5>活跃告警列表</h5>
+                            <span class="badge bg-danger" id="criticalAlertsBadge">0 严重</span>
+                            <span class="badge bg-warning" id="warningAlertsBadge">0 警告</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="alertsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作历史 -->
+        <div id="history" class="row mb-4" style="display: none;">
+            <div class="col-12">
+                <h2><i class="fas fa-history"></i> 操作历史</h2>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-tools"></i> 系统操作</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="actionHistory"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-comments"></i> 对话记录</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="conversationHistory"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 智能对话 -->
+        <div id="ai-chat" class="row mb-4" style="display: none;">
+            <div class="col-12">
+                <h2><i class="fas fa-robot"></i> 智能对话</h2>
+
+                <div class="row">
+                    <div class="col-md-9">
+                        <!-- 对话区域 -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-comments"></i> 与AI运维助手对话</h5>
+                                <button class="btn btn-outline-primary btn-sm" onclick="clearChat()">
+                                    <i class="fas fa-trash"></i>
+                                    清空对话
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <!-- 聊天消息区域 -->
+                                <div id="chatMessages" class="chat-container" style="height: 400px; overflow-y: auto; padding: 15px; border: 1px solid #dee2e6; border-radius: 8px; background-color: #f8f9fa;">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-robot fa-2x mb-3"></i>
+                                        <p>开始与智能运维助手对话吧！</p>
+                                        <small>你可以询问系统状态、监控数据、故障诊断等问题</small>
+                                    </div>
+                                </div>
+
+                                <!-- 输入区域 -->
+                                <div class="input-group mt-3">
+                                    <input type="text" id="chatInput" class="form-control" placeholder="输入你的问题..."
+                                           onkeypress="if(event.key === 'Enter') sendMessage()">
+                                    <button class="btn btn-primary" onclick="sendMessage()">
+                                        <i class="fas fa-paper-plane"></i>
+                                        发送
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="quickQuestion('status')">
+                                        系统状态
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="quickQuestion('check')">
+                                        如何执行检查
+                                    </button>
+                                </div>
+
+                                <!-- 快捷问题 -->
+                                <div class="mt-3">
+                                    <small class="text-muted">快捷问题：</small>
+                                    <div class="btn-group-sm" role="group">
+                                        <button class="btn btn-outline-info" onclick="quickQuestion('cpu')">
+                                            CPU使用率
+                                        </button>
+                                        <button class="btn btn-outline-info" onclick="quickQuestion('memory')">
+                                            内存使用
+                                        </button>
+                                        <button class="btn btn-outline-info" onclick="quickQuestion('disk')">
+                                            磁盘空间
+                                        </button>
+                                        <button class="btn btn-outline-info" onclick="quickQuestion('alerts')">
+                                            当前告警
+                                        </button>
+                                        <button class="btn btn-outline-info" onclick="quickQuestion('optimize')">
+                                            性能优化建议
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <!-- 对话统计 -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6><i class="fas fa-chart-bar"></i> 对话统计</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="stat-item">
+                                    <small class="text-muted">今日对话</small>
+                                    <h4 id="todayChats" class="mb-0">0</h4>
+                                </div>
+                                <hr>
+                                <div class="stat-item">
+                                    <small class="text-muted">消息总数</small>
+                                    <h4 id="totalMessages" class="mb-0">0</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 常见问题 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h6><i class="fas fa-question-circle"></i> 常见问题</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="faq-item mb-2">
+                                    <small class="d-block text-muted">系统负载过高怎么办？</small>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="quickQuestion('load')">
+                                        询问AI
+                                    </button>
+                                </div>
+                                <div class="faq-item mb-2">
+                                    <small class="d-block text-muted">如何优化内存使用？</small>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="quickQuestion('memory-optimize')">
+                                        询问AI
+                                    </button>
+                                </div>
+                                <div class="faq-item mb-2">
+                                    <small class="d-block text-muted">磁盘空间满了怎么办？</small>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="quickQuestion('disk-cleanup')">
+                                        询问AI
+                                    </button>
+                                </div>
+                                <div class="faq-item">
+                                    <small class="d-block text-muted">网络安全检查</small>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="quickQuestion('security')">
+                                        询问AI
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 系统配置 -->
+        <div id="config" class="row mb-4" style="display: none;">
+            <div class="col-12">
+                <h2><i class="fas fa-cog"></i> 系统配置</h2>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-server"></i> 服务器配置</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="serverConfig"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-sliders-h"></i> 阈值配置</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="thresholdConfig"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 消息通知 -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notificationContainer"></div>
+    </div>
+
+    <!-- 检查进度模态框 -->
+    <div class="modal fade" id="checkModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">系统检查进行中</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                             role="progressbar" style="width: 100%"></div>
+                    </div>
+                    <p id="checkStatus">正在收集监控数据...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 自定义JS -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

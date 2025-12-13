@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码编辑功能测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; font-family: monospace; }
+        #results { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 代码编辑功能测试</h1>
+
+        <div class="test-section">
+            <h3>1. 测试API连接</h3>
+            <button onclick="testConnection()">测试连接</button>
+            <div id="connection-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. 获取修复方案</h3>
+            <button onclick="getFixPlans()">获取修复方案</button>
+            <div id="fixplans-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. 测试命令编辑</h3>
+            <div>
+                <label>方案ID:</label>
+                <input type="text" id="planId" value="plan_1" style="width: 200px; margin: 5px;">
+            </div>
+            <div>
+                <label>命令索引:</label>
+                <input type="number" id="commandIndex" value="0" style="width: 100px; margin: 5px;">
+            </div>
+            <div>
+                <label>新命令:</label>
+                <textarea id="newCommand" placeholder="输入新的Shell命令...">top -b -n 1 | head -n 20</textarea>
+            </div>
+            <button onclick="testCommandEdit()">测试编辑</button>
+            <div id="edit-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. 测试安全验证</h3>
+            <button onclick="testSecurity()">测试安全验证</button>
+            <div id="security-result"></div>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://localhost:8001'; // 使用8001端口，那里有新的代码
+
+        async function testConnection() {
+            try {
+                const response = await fetch(`${BASE_URL}/api/status`);
+                const result = await response.json();
+                document.getElementById('connection-result').innerHTML =
+                    `<div class="success">✅ 连接成功 - 系统状态: ${result.status}</div>`;
+            } catch (error) {
+                document.getElementById('connection-result').innerHTML =
+                    `<div class="error">❌ 连接失败: ${error.message}</div>`;
+            }
+        }
+
+        async function getFixPlans() {
+            try {
+                const response = await fetch(`${BASE_URL}/api/fix-plans`);
+                const result = await response.json();
+                const html = result.success && result.fix_plans.length > 0 ?
+                    `<div class="success">✅ 找到 ${result.count} 个修复方案</div>` :
+                    `<div class="error">❌ 没有找到修复方案</div>`;
+                document.getElementById('fixplans-result').innerHTML = html;
+            } catch (error) {
+                document.getElementById('fixplans-result').innerHTML =
+                    `<div class="error">❌ 获取失败: ${error.message}</div>`;
+            }
+        }
+
+        async function testCommandEdit() {
+            const planId = document.getElementById('planId').value;
+            const commandIndex = parseInt(document.getElementById('commandIndex').value);
+            const newCommand = document.getElementById('newCommand').value;
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/command/edit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        plan_id: planId,
+                        command_index: commandIndex,
+                        new_command: newCommand,
+                        original_command: 'top -b -n 1 | head -n 17'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('edit-result').innerHTML =
+                        `<div class="success">✅ 编辑成功: ${result.message}</div>`;
+                } else {
+                    document.getElementById('edit-result').innerHTML =
+                        `<div class="error">❌ 编辑失败: ${result.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('edit-result').innerHTML =
+                    `<div class="error">❌ 编辑请求失败: ${error.message}</div>`;
+            }
+        }
+
+        async function testSecurity() {
+            const safeCommand = 'ps aux | head -10';
+            const dangerousCommand = 'rm -rf /';
+
+            const results = [];
+
+            // 测试安全命令
+            try {
+                const response = await fetch(`${BASE_URL}/api/command/edit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        plan_id: 'test',
+                        command_index: 0,
+                        new_command: safeCommand
+                    })
+                });
+                const result = await response.json();
+                results.push(`安全命令 "${safeCommand}": ${result.success ? '✅ 通过' : '❌ 拒绝'}`);
+            } catch (error) {
+                results.push(`安全命令测试失败: ${error.message}`);
+            }
+
+            // 测试危险命令
+            try {
+                const response = await fetch(`${BASE_URL}/api/command/edit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        plan_id: 'test',
+                        command_index: 0,
+                        new_command: dangerousCommand
+                    })
+                });
+                const result = await response.json();
+                results.push(`危险命令 "${dangerousCommand}": ${result.success ? '⚠️ 意外通过' : '✅ 正确拒绝'}`);
+            } catch (error) {
+                results.push(`危险命令测试失败: ${error.message}`);
+            }
+
+            document.getElementById('security-result').innerHTML =
+                `<div>${results.join('<br>')}</div>`;
+        }
+
+        // 页面加载时自动测试连接
+        window.onload = function() {
+            testConnection();
+        };
+    </script>
+</body>
+</html>
