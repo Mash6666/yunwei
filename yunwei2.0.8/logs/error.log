@@ -1,0 +1,147 @@
+2025-12-13 19:33:17 - test_basic - ERROR - test_logger.py:29 - 这是一条ERROR级别的日志
+2025-12-13 19:33:17 - test_basic - CRITICAL - test_logger.py:30 - 这是一条CRITICAL级别的日志
+2025-12-13 19:33:17 - test_basic - ERROR - logger_config.py:248 - [system] 配置更新失败 - 详情: {'config': 'network', 'error': 'invalid_format'}
+2025-12-13 19:33:17 - test_error - ERROR - logger_config.py:114 - 异常发生 - 上下文: 数学计算测试
+异常类型: ZeroDivisionError
+异常信息: division by zero
+额外数据: {'operation': 'division', 'dividend': 1, 'divisor': 0}
+堆栈追踪:
+Traceback (most recent call last):
+  File "C:\Users\1\Desktop\yunwei\test_logger.py", line 88, in test_error_logging
+    result = 1 / 0
+             ~~^~~
+ZeroDivisionError: division by zero
+
+2025-12-13 19:33:17 - test_error - ERROR - logger_config.py:138 - 函数执行错误 - test_function
+参数: args=(-5,), kwargs={}
+错误: 参数不能为负数: -5
+堆栈: Traceback (most recent call last):
+  File "C:\Users\1\Desktop\yunwei\logger_config.py", line 163, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\1\Desktop\yunwei\test_logger.py", line 100, in test_function
+    raise ValueError(f"参数不能为负数: {param}")
+ValueError: 参数不能为负数: -5
+
+2025-12-13 19:33:17 - test_error - ERROR - logger_config.py:138 - 函数执行错误 - file_operations
+参数: args=(), kwargs={}
+错误: [Errno 2] No such file or directory: 'nonexistent_file.txt'
+堆栈: Traceback (most recent call last):
+  File "C:\Users\1\Desktop\yunwei\logger_config.py", line 163, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\1\Desktop\yunwei\test_logger.py", line 146, in file_operations
+    raise e
+  File "C:\Users\1\Desktop\yunwei\test_logger.py", line 143, in file_operations
+    with open("nonexistent_file.txt", "r") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'nonexistent_file.txt'
+
+2025-12-13 19:33:17 - test_error - ERROR - logger_config.py:138 - 函数执行错误 - network_operations
+参数: args=(), kwargs={}
+错误: [Errno 11001] getaddrinfo failed
+堆栈: Traceback (most recent call last):
+  File "C:\Users\1\Desktop\yunwei\logger_config.py", line 163, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\1\Desktop\yunwei\test_logger.py", line 157, in network_operations
+    raise e
+  File "C:\Users\1\Desktop\yunwei\test_logger.py", line 154, in network_operations
+    sock.connect(("invalid_host_12345.com", 80))
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+2025-12-13 19:33:17 - test_error - ERROR - logger_config.py:138 - 函数执行错误 - data_processing
+参数: args=(), kwargs={}
+错误: 年龄必须是整数，当前类型: <class 'str'>
+堆栈: Traceback (most recent call last):
+  File "C:\Users\1\Desktop\yunwei\logger_config.py", line 163, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\1\Desktop\yunwei\test_logger.py", line 164, in data_processing
+    raise TypeError(f"年龄必须是整数，当前类型: {type(data['age'])}")
+TypeError: 年龄必须是整数，当前类型: <class 'str'>
+
+2025-12-13 19:45:03 - langgraph - ERROR - langgraph_logger.py:154 - 节点执行失败: analyze_system (耗时: 0.03s), 错误: 系统分析失败: 连接超时
+2025-12-13 19:45:03 - langgraph - ERROR - langgraph_logger.py:279 - 系统操作失败: 连接远程服务器, 错误: SSH连接超时
+2025-12-13 19:45:03 - test_langgraph - ERROR - logger_config.py:248 - [system] 系统操作失败: 连接远程服务器 - 详情: {'action': '连接远程服务器', 'parameters': {'host': '10.0.0.81', 'port': 22, 'username': 'root'}, 'session_id': 'action_test_1765626303', 'error': 'SSH连接超时'}
+2025-12-13 19:45:11 - langgraph - ERROR - langgraph_logger.py:154 - 节点执行失败: analyze_system (耗时: 0.03s), 错误: 系统分析失败: 连接超时
+2025-12-13 19:45:11 - langgraph - ERROR - langgraph_logger.py:279 - 系统操作失败: 连接远程服务器, 错误: SSH连接超时
+2025-12-13 19:45:11 - test_langgraph - ERROR - logger_config.py:248 - [system] 系统操作失败: 连接远程服务器 - 详情: {'action': '连接远程服务器', 'parameters': {'host': '10.0.0.81', 'port': 22, 'username': 'root'}, 'session_id': 'action_test_1765626311', 'error': 'SSH连接超时'}
+2025-12-13 19:47:03 - ops_graph - ERROR - ops_graph.py:495 - 智能运维助手运行失败: log_langgraph_node.<locals>.decorator.<locals>.async_wrapper() takes 1 positional argument but 2 were given
+2025-12-13 19:47:16 - ops_graph - ERROR - ops_graph.py:495 - 智能运维助手运行失败: log_langgraph_node.<locals>.decorator.<locals>.async_wrapper() takes 1 positional argument but 2 were given
+2025-12-13 19:48:38 - ops_graph - ERROR - ops_graph.py:495 - 智能运维助手运行失败: log_langgraph_node.<locals>.decorator.<locals>.async_wrapper() takes 1 positional argument but 2 were given
+2025-12-13 19:48:45 - ops_graph - ERROR - ops_graph.py:495 - 智能运维助手运行失败: log_langgraph_node.<locals>.decorator.<locals>.async_wrapper() takes 1 positional argument but 2 were given
+2025-12-13 19:49:18 - ops_graph - ERROR - ops_graph.py:495 - 智能运维助手运行失败: log_langgraph_node.<locals>.decorator.<locals>.async_wrapper() takes 1 positional argument but 2 were given
+2025-12-13 19:52:02 - ops_graph - ERROR - ops_graph.py:495 - 智能运维助手运行失败: 'OpsAssistantGraph' object does not support item assignment
+2025-12-13 19:53:29 - langgraph - ERROR - langgraph_logger.py:328 - 写入对话日志失败: Object of type SystemStatus is not JSON serializable
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:49 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:31:50 - react_ops_graph - ERROR - react_ops_graph.py:941 - React智能运维助手运行失败: 'ReactOpsAssistantGraph' object has no attribute 'logger'
+2025-12-13 20:32:09 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:32:09 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:32:39 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:32:39 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:32:39 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:32:39 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:32:39 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:55:18 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:55:18 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:55:18 - react_ops_graph - ERROR - logger_config.py:248 - [web_client] React聊天API异常 - 详情: {'error': "object of type 'NoneType' has no len()", 'processing_time': '0.01s'}
+2025-12-13 20:56:14 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:56:14 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:56:14 - react_ops_graph - ERROR - logger_config.py:248 - [web_client] React聊天API异常 - 详情: {'error': "object of type 'NoneType' has no len()", 'processing_time': '0.01s'}
+2025-12-13 20:58:33 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:58:33 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:58:54 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:59:08 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:59:08 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'requires_metrics'
+2025-12-13 20:59:08 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:59:38 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'intent_type'
+2025-12-13 20:59:38 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:59:38 - react_ops_graph - ERROR - logger_config.py:248 - [web_client] React聊天API异常 - 详情: {'error': "object of type 'NoneType' has no len()", 'processing_time': '0.01s'}
+2025-12-13 20:59:38 - react_ops_graph - ERROR - react_ops_graph.py:273 - 对话响应生成失败: 'NoneType' object has no attribute 'intent_type'
+2025-12-13 20:59:38 - react_ops_graph - ERROR - react_ops_graph.py:301 - 结束对话失败: 'NoneType' object has no attribute 'encode'
+2025-12-13 20:59:38 - react_ops_graph - ERROR - logger_config.py:248 - [web_client] React聊天API异常 - 详情: {'error': "object of type 'NoneType' has no len()", 'processing_time': '0.01s'}
+2025-12-13 23:00:13 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object has no attribute 'get'
+2025-12-13 23:00:36 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object has no attribute 'get'
+2025-12-13 23:02:07 - web_app - ERROR - web_app.py:900 - 获取表信息失败: weakly-referenced object no longer exists
+2025-12-13 23:02:11 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object has no attribute 'get'
+2025-12-13 23:02:14 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:02:17 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:02:24 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:02:27 - web_app - ERROR - web_app.py:900 - 获取表信息失败: weakly-referenced object no longer exists
+2025-12-13 23:02:35 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:10:29 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object has no attribute 'get'
+2025-12-13 23:10:46 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:11:10 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:14:42 - database_chat_graph - ERROR - database_chat_graph.py:249 - 数据库对话助手运行失败: 'dict' object has no attribute 'user_query'
+2025-12-13 23:14:57 - database_chat_graph - ERROR - database_chat_graph.py:249 - 数据库对话助手运行失败: 'dict' object has no attribute 'user_query'
+2025-12-13 23:18:13 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:19:39 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:19:58 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:20:45 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:20:52 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:22:55 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:23:09 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:24:13 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
+2025-12-13 23:28:03 - database_chat_graph - ERROR - database_chat_graph.py:219 - 数据库对话助手运行失败: 'DatabaseChatState' object does not support item assignment
