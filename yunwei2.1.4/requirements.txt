@@ -1,0 +1,22 @@
+langgraph>=0.0.40
+langchain>=0.1.0
+langchain-openai>=0.1.0
+requests>=2.31.0
+paramiko>=3.3.1
+prometheus-client>=0.18.0
+python-dotenv>=1.0.0
+asyncio>=3.4.3
+typing-extensions>=4.8.0
+pydantic>=2.5.0
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+websockets>=12.0
+python-multipart>=0.0.6
+pymysql>=1.1.0
+# 向量数据库和RAG相关依赖
+chromadb>=0.4.0
+langchain-community>=0.0.10
+tiktoken>=0.5.0
+pypdf>=3.17.0
+python-docx>=0.8.11
+openpyxl>=3.1.0
