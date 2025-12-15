@@ -8,9 +8,9 @@
 使用大模型帮忙写测试,前端,以及一些功能的开发,一人成军,做了这个简单的智能运维系统,可以通过Promethus监控linux各项数据,找出问题,然后通过agent生成修复方案并人工判断执行(也可以做监控其他的,nginx或者其他中间件什么的,只需要去监控就好),支持上传公司内部手册到知识库,基于向量数据库进行回答。本来想做个自然语言数据库管理系统,但是由于没做登陆系统,增删改还是先不做了,只做个查询,用langchain简单做一个,回头再搞
 
 
-<img width="2499" height="1462" alt="image" src="https://github.com/user-attachments/assets/38016200-4611-4d9c-8286-8f206f309e28" />
+<img width="1974" height="1451" alt="屏幕截图 2025-12-15 235056" src="https://github.com/user-attachments/assets/2894ef10-306f-4891-ae97-53c5bf5d91fc" />
 
-<img width="2529" height="1399" alt="屏幕截图 2025-12-15 221928" src="https://github.com/user-attachments/assets/bdb4c9b3-7513-4ffd-a6b0-278784998c6f" />
+<img width="1946" height="1386" alt="屏幕截图 2025-12-15 235016" src="https://github.com/user-attachments/assets/01890fb3-fe7f-48db-a5d3-44f3eaee0e74" />
 
 
 <img width="2520" height="1536" alt="image" src="https://github.com/user-attachments/assets/54c6e20a-bb50-4858-8b57-44196c12622b" />
