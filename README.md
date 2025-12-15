@@ -7,7 +7,8 @@
 
 功能不全,有些许bug,请见谅
 <img width="2499" height="1462" alt="image" src="https://github.com/user-attachments/assets/38016200-4611-4d9c-8286-8f206f309e28" />
-<img width="2559" height="1429" alt="image" src="https://github.com/user-attachments/assets/ae475826-93b8-4462-9571-d1c6454034cc" />
+
+<img width="2529" height="1399" alt="屏幕截图 2025-12-15 221928" src="https://github.com/user-attachments/assets/bdb4c9b3-7513-4ffd-a6b0-278784998c6f" />
 
 
 <img width="2520" height="1536" alt="image" src="https://github.com/user-attachments/assets/54c6e20a-bb50-4858-8b57-44196c12622b" />
